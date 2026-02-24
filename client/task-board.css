@@ -1,0 +1,218 @@
+/* ===== TASK BOARD STYLES ===== */
+
+html, body.bespoke {
+  height: 100%;
+  overflow: hidden;
+}
+
+.bespoke .board-layout {
+  display: flex;
+  height: calc(100vh - 42px);
+  overflow: hidden;
+}
+
+/* ===== COLUMNS ===== */
+
+.bespoke .board-columns {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--UI-Spacing-spacing-ms);
+  flex: 1;
+  padding: var(--UI-Spacing-spacing-ms);
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.bespoke .board-column {
+  display: flex;
+  flex-direction: column;
+  background: var(--Colors-Backgrounds-Main-Default);
+  border: 1px solid var(--Colors-Stroke-Default);
+  border-radius: var(--UI-Radius-radius-s);
+  min-width: 200px;
+  overflow: hidden;
+}
+
+.bespoke .board-column.drag-over {
+  border-color: var(--Colors-Primary-Default);
+  background: color-mix(in srgb, var(--Colors-Primary-Default) 6%, var(--Colors-Backgrounds-Main-Default));
+}
+
+.bespoke .board-column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--UI-Spacing-spacing-ms) var(--UI-Spacing-spacing-ml);
+  border-bottom: 1px solid var(--Colors-Stroke-Default);
+  background: var(--Colors-Backgrounds-Main-Top);
+  flex-shrink: 0;
+}
+
+.bespoke .board-column-title {
+  font: var(--Fonts-Body-Strong-sm);
+  color: var(--Colors-Text-Body-Strongest);
+  display: flex;
+  align-items: center;
+  gap: var(--UI-Spacing-spacing-s);
+}
+
+.bespoke .board-column-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--Colors-Stroke-Default);
+  color: var(--Colors-Text-Body-Default);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.bespoke .board-column-add {
+  border: none;
+  background: none;
+  color: var(--Colors-Text-Body-Light);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: var(--UI-Radius-radius-s);
+  transition: background 0.1s, color 0.1s;
+}
+
+.bespoke .board-column-add:hover {
+  background: var(--Colors-Stroke-Default);
+  color: var(--Colors-Text-Body-Strongest);
+}
+
+.bespoke .board-column-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--UI-Spacing-spacing-s);
+  display: flex;
+  flex-direction: column;
+  gap: var(--UI-Spacing-spacing-s);
+}
+
+/* ===== STATUS DOT COLORS ===== */
+
+.bespoke .status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.bespoke .status-dot.pending    { background: var(--Colors-Base-Neutral-500); }
+.bespoke .status-dot.inprogress { background: var(--Colors-Base-Primary-500); }
+.bespoke .status-dot.blocked    { background: var(--Colors-Base-Error-500); }
+.bespoke .status-dot.done       { background: var(--Colors-Base-Success-500); }
+
+/* ===== TASK CARD ===== */
+
+.bespoke .task-card {
+  background: var(--Colors-Backgrounds-Main-Top);
+  border: 1px solid var(--Colors-Stroke-Default);
+  border-radius: var(--UI-Radius-radius-s);
+  padding: var(--UI-Spacing-spacing-ms);
+  cursor: grab;
+  transition: box-shadow 0.15s, border-color 0.15s, opacity 0.15s;
+  user-select: none;
+}
+
+.bespoke .task-card:hover {
+  border-color: var(--Colors-Primary-Default);
+}
+
+.bespoke .task-card.dragging {
+  opacity: 0.4;
+  cursor: grabbing;
+}
+
+.bespoke .task-card-title {
+  font: var(--Fonts-Body-Strong-sm);
+  color: var(--Colors-Text-Body-Strongest);
+  margin: 0 0 4px 0;
+  word-break: break-word;
+}
+
+.bespoke .task-card-desc {
+  font: var(--Fonts-Body-Default-xs);
+  color: var(--Colors-Text-Body-Light);
+  margin: 0;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.bespoke .task-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--UI-Spacing-spacing-s);
+}
+
+.bespoke .task-card-assignee {
+  font: var(--Fonts-Body-Default-xs);
+  color: var(--Colors-Text-Body-Default);
+}
+
+.bespoke .task-card-priority {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.bespoke .task-card-priority.high {
+  background: color-mix(in srgb, var(--Colors-Base-Error-500) 15%, transparent);
+  color: var(--Colors-Base-Error-500);
+}
+
+.bespoke .task-card-priority.medium {
+  background: color-mix(in srgb, var(--Colors-Base-Warning-500) 15%, transparent);
+  color: var(--Colors-Base-Warning-600);
+}
+
+.bespoke .task-card-priority.low {
+  background: color-mix(in srgb, var(--Colors-Base-Success-500) 15%, transparent);
+  color: var(--Colors-Base-Success-600);
+}
+
+/* ===== DROP PLACEHOLDER ===== */
+
+.bespoke .task-card-placeholder {
+  border: 2px dashed var(--Colors-Primary-Default);
+  border-radius: var(--UI-Radius-radius-s);
+  min-height: 60px;
+  background: color-mix(in srgb, var(--Colors-Primary-Default) 8%, transparent);
+}
+
+/* ===== ADD TASK INLINE FORM ===== */
+
+.bespoke .add-task-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--UI-Spacing-spacing-s);
+  padding: var(--UI-Spacing-spacing-ms);
+  background: var(--Colors-Backgrounds-Main-Top);
+  border: 1px solid var(--Colors-Primary-Default);
+  border-radius: var(--UI-Radius-radius-s);
+}
+
+.bespoke .add-task-form .input {
+  font-size: 13px;
+}
+
+.bespoke .add-task-form-actions {
+  display: flex;
+  gap: var(--UI-Spacing-spacing-s);
+}
+
+.bespoke .add-task-form-actions .button {
+  font-size: 12px;
+  padding: 4px 12px;
+}

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Task Board</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./design-system/colors/colors.css">
+  <link rel="stylesheet" href="./design-system/spacing/spacing.css">
+  <link rel="stylesheet" href="./design-system/typography/typography.css">
+  <link rel="stylesheet" href="./design-system/components/button/button.css">
+  <link rel="stylesheet" href="./design-system/components/boxes/boxes.css">
+  <link rel="stylesheet" href="./design-system/components/input/input.css">
+  <link rel="stylesheet" href="./design-system/components/dropdown/dropdown.css">
+  <link rel="stylesheet" href="./design-system/components/tags/tags.css">
+  <link rel="stylesheet" href="./design-system/components/modal/modal.css">
+
+  <link rel="stylesheet" href="./bespoke-template.css" />
+  <link rel="stylesheet" href="./task-board.css" />
+</head>
+<body class="bespoke">
+  <header class="header">
+    <h1 class="heading-small">Task Board</h1>
+    <div class="spacer"></div>
+    <button id="btn-help" class="button button-text">Help</button>
+  </header>
+
+  <div class="board-layout">
+    <div class="board-columns" id="board-columns"></div>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+  <script type="module" src="./standalone.js"></script>
+</body>
+</html>
