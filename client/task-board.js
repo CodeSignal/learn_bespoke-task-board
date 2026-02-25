@@ -133,7 +133,7 @@ function handleAddSubmit(colId, title, desc) {
   _addFormColumn = null;
   renderBoard();
   if (_context.emit) {
-    _context.emit('task:added', { taskId: id, title, status: colId });
+    _context.emit('task:added', { taskId: id, title, desc: desc || '', status: colId });
   }
 }
 

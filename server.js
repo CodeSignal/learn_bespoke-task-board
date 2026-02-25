@@ -17,6 +17,10 @@ if (isProduction && !fs.existsSync(STATIC_DIR)) throw new Error(`Serve directory
 const PORT = process.env.PORT || 3000;
 const wsClients = new Set();
 
+const LOG_DIR = path.join(__dirname, 'logs');
+const LOG_FILE = path.join(LOG_DIR, 'events.jsonl');
+if (!fs.existsSync(LOG_DIR)) fs.mkdirSync(LOG_DIR, { recursive: true });
+
 const mimeTypes = {
   '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css',
   '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg',
@@ -32,7 +36,45 @@ function serveFile(filePath, res) {
   });
 }
 
+function readBody(req) {
+  return new Promise((resolve, reject) => {
+    let body = '';
+    req.on('data', chunk => { body += chunk.toString(); });
+    req.on('end', () => {
+      try { resolve(JSON.parse(body)); }
+      catch (e) { reject(e); }
+    });
+    req.on('error', reject);
+  });
+}
+
+async function handleLogRequest(req, res) {
+  try {
+    const data = await readBody(req);
+    const entries = data.entries;
+    if (!Array.isArray(entries) || entries.length === 0) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'entries array is required' }));
+      return;
+    }
+    const lines = entries.map(e => JSON.stringify(e)).join('\n') + '\n';
+    fs.appendFile(LOG_FILE, lines, (err) => {
+      if (err) console.error('Failed to write log:', err);
+    });
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ ok: true, count: entries.length }));
+  } catch (error) {
+    res.writeHead(400, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Invalid JSON' }));
+  }
+}
+
 function handlePostRequest(req, res, parsedUrl) {
+  if (parsedUrl.pathname === '/api/log') {
+    handleLogRequest(req, res);
+    return;
+  }
+
   if (parsedUrl.pathname === '/message') {
     let body = '';
     req.on('data', c => { body += c.toString(); });
