@@ -9,9 +9,12 @@ try { WebSocket = require('ws'); isWebSocketAvailable = true; console.log('WebSo
 catch (e) { console.log('WebSocket support disabled'); }
 
 const DIST_DIR = path.join(__dirname, 'dist');
+const STATIC_DIR = process.env.SERVE_DIR
+  ? path.join(__dirname, process.env.SERVE_DIR)
+  : DIST_DIR;
 const isProduction = process.env.IS_PRODUCTION === 'true';
-if (isProduction && !fs.existsSync(DIST_DIR)) throw new Error('dist directory does not exist');
-const PORT = isProduction ? 3000 : (process.env.PORT || 3000);
+if (isProduction && !fs.existsSync(STATIC_DIR)) throw new Error(`Serve directory does not exist: ${STATIC_DIR}`);
+const PORT = process.env.PORT || 3000;
 const wsClients = new Set();
 
 const mimeTypes = {
@@ -50,8 +53,8 @@ const server = http.createServer((req, res) => {
   let pathName = parsedUrl.pathname === '/' ? '/index.html' : parsedUrl.pathname;
   if (req.method === 'POST') { handlePostRequest(req, res, parsedUrl); return; }
   if (isProduction) {
-    let filePath = path.join(DIST_DIR, pathName.replace(/^\/+/, ''));
-    if (path.relative(path.resolve(DIST_DIR), path.resolve(filePath)).startsWith('..')) { res.writeHead(403); res.end('Forbidden'); return; }
+    let filePath = path.join(STATIC_DIR, pathName.replace(/^\/+/, ''));
+    if (path.relative(path.resolve(STATIC_DIR), path.resolve(filePath)).startsWith('..')) { res.writeHead(403); res.end('Forbidden'); return; }
     serveFile(filePath, res);
   } else { res.writeHead(404); res.end('Not found (dev mode)'); }
 });
