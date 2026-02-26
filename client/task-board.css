@@ -215,7 +215,8 @@ html, body.bespoke {
 }
 
 .bespoke .add-task-form select.input {
-  appearance: auto;
+  appearance: none;
+  -webkit-appearance: none;
   cursor: pointer;
 }
 
