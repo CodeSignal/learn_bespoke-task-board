@@ -64,8 +64,8 @@ html, body.bespoke {
   height: 20px;
   padding: 0 6px;
   border-radius: 10px;
-  background: var(--Colors-Stroke-Default);
-  color: var(--Colors-Text-Body-Default);
+  background: color-mix(in srgb, var(--Colors-Primary-Default) 15%, transparent);
+  color: var(--Colors-Text-Body-Strongest);
   font-size: 11px;
   font-weight: 600;
 }
@@ -105,10 +105,10 @@ html, body.bespoke {
   flex-shrink: 0;
 }
 
-.bespoke .status-dot.pending    { background: var(--Colors-Base-Neutral-500); }
-.bespoke .status-dot.inprogress { background: var(--Colors-Base-Primary-500); }
-.bespoke .status-dot.blocked    { background: var(--Colors-Base-Error-500); }
-.bespoke .status-dot.done       { background: var(--Colors-Base-Success-500); }
+.bespoke .status-dot.pending    { background: var(--Colors-Base-Neutral-600); }
+.bespoke .status-dot.inprogress { background: var(--Colors-Primary-Default); }
+.bespoke .status-dot.blocked    { background: var(--Colors-Alert-Error-Default); }
+.bespoke .status-dot.done       { background: var(--Colors-Alert-Success-Default); }
 
 /* ===== TASK CARD ===== */
 
@@ -160,26 +160,32 @@ html, body.bespoke {
 
 .bespoke .task-card-priority {
   font-size: 10px;
-  font-weight: 600;
-  padding: 1px 6px;
-  border-radius: 8px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  transition: opacity 0.1s;
+}
+
+.bespoke .task-card-priority:hover {
+  opacity: 0.8;
 }
 
 .bespoke .task-card-priority.high {
-  background: color-mix(in srgb, var(--Colors-Base-Error-500) 15%, transparent);
-  color: var(--Colors-Base-Error-500);
+  background: var(--Colors-Base-Accent-Red-500);
+  color: #fff;
 }
 
 .bespoke .task-card-priority.medium {
-  background: color-mix(in srgb, var(--Colors-Base-Warning-500) 15%, transparent);
-  color: var(--Colors-Base-Warning-600);
+  background: var(--Colors-Base-Accent-Orange-500);
+  color: #fff;
 }
 
 .bespoke .task-card-priority.low {
-  background: color-mix(in srgb, var(--Colors-Base-Success-500) 15%, transparent);
-  color: var(--Colors-Base-Success-600);
+  background: var(--Colors-Base-Neutral-800);
+  color: #fff;
 }
 
 /* ===== DROP PLACEHOLDER ===== */
@@ -205,6 +211,12 @@ html, body.bespoke {
 
 .bespoke .add-task-form .input {
   font-size: 13px;
+  padding: 6px 8px;
+}
+
+.bespoke .add-task-form select.input {
+  appearance: auto;
+  cursor: pointer;
 }
 
 .bespoke .add-task-form-actions {

@@ -10,10 +10,9 @@ const SEED_TASKS = [
   { id: 't2', title: 'Prepare rollback runbook', desc: 'Document step-by-step rollback procedure including feature flag and DB migration revert.', status: 'pending', assignee: 'Alex R.', priority: 'high' },
   { id: 't3', title: 'Send customer notification email', desc: 'Notify enterprise customers about the upcoming v2.0 release and expected downtime window.', status: 'done', assignee: 'Marketing', priority: 'medium' },
   { id: 't4', title: 'Update API documentation', desc: 'Add docs for new endpoints introduced in v2.0.', status: 'inprogress', assignee: 'Jordan K.', priority: 'medium' },
-  { id: 't5', title: 'Investigate /api/users 500 errors', desc: 'Datadog showing ~2% error rate on /api/users since 8:45 AM. Possible race condition in connection pooling.', status: 'inprogress', assignee: 'Alex R.', priority: 'high' },
-  { id: 't6', title: 'Review onboarding flow copy', desc: 'Final copy review for the updated first-run experience.', status: 'done', assignee: 'Sarah C.', priority: 'low' },
-  { id: 't7', title: 'Deploy marketing landing page', desc: 'Blocked on engineering go/no-go decision at 9 AM.', status: 'blocked', assignee: 'Marketing', priority: 'medium' },
-  { id: 't8', title: 'Post launch announcement in #general', desc: 'Prepare Slack message for all-hands after successful deploy.', status: 'pending', assignee: 'Sarah C.', priority: 'low' }
+  { id: 't5', title: 'Review onboarding flow copy', desc: 'Final copy review for the updated first-run experience.', status: 'done', assignee: 'Sarah C.', priority: 'low' },
+  { id: 't6', title: 'Deploy marketing landing page', desc: 'Blocked on engineering go/no-go decision at 9 AM.', status: 'blocked', assignee: 'Marketing', priority: 'medium' },
+  { id: 't7', title: 'Post launch announcement in #general', desc: 'Prepare Slack message for all-hands after successful deploy.', status: 'pending', assignee: 'Sarah C.', priority: 'low' }
 ];
 
 const DATA_VERSION = 1;
@@ -111,6 +110,11 @@ function renderAddForm(colId) {
     <form class="add-task-form" data-col="${colId}">
       <input type="text" class="input" name="title" placeholder="Task title" autocomplete="off" required />
       <input type="text" class="input" name="desc" placeholder="Description (optional)" autocomplete="off" />
+      <select class="input" name="priority">
+        <option value="high">High</option>
+        <option value="medium" selected>Medium</option>
+        <option value="low">Low</option>
+      </select>
       <div class="add-task-form-actions">
         <button type="submit" class="button button-primary">Add</button>
         <button type="button" class="button button-text add-task-cancel">Cancel</button>
@@ -126,14 +130,14 @@ function handleAddClick(colId) {
   if (form) form.focus();
 }
 
-function handleAddSubmit(colId, title, desc) {
+function handleAddSubmit(colId, title, desc, priority) {
   const id = `t${nextId++}`;
-  tasks.push({ id, title, desc: desc || '', status: colId, assignee: '', priority: 'medium' });
+  tasks.push({ id, title, desc: desc || '', status: colId, assignee: '', priority: priority || 'medium' });
   saveTasks();
   _addFormColumn = null;
   renderBoard();
   if (_context.emit) {
-    _context.emit('task:added', { taskId: id, title, desc: desc || '', status: colId });
+    _context.emit('task:added', { taskId: id, title, desc: desc || '', status: colId, priority });
   }
 }
 
@@ -274,6 +278,21 @@ export function init(context = {}) {
     }
   }, { signal });
 
+  container.addEventListener('click', (e) => {
+    const badge = e.target.closest('.task-card-priority');
+    if (!badge) return;
+    const card = badge.closest('.task-card');
+    if (!card) return;
+    e.stopPropagation();
+    const task = tasks.find(t => t.id === card.dataset.taskId);
+    if (!task) return;
+    const cycle = ['low', 'medium', 'high'];
+    const idx = cycle.indexOf(task.priority);
+    task.priority = cycle[(idx + 1) % cycle.length];
+    saveTasks();
+    renderBoard();
+  }, { signal });
+
   container.addEventListener('submit', (e) => {
     e.preventDefault();
     const form = e.target.closest('.add-task-form');
@@ -281,7 +300,8 @@ export function init(context = {}) {
     const title = form.querySelector('input[name="title"]').value.trim();
     if (!title) return;
     const desc = form.querySelector('input[name="desc"]').value.trim();
-    handleAddSubmit(form.dataset.col, title, desc);
+    const priority = form.querySelector('select[name="priority"]').value;
+    handleAddSubmit(form.dataset.col, title, desc, priority);
   }, { signal });
 }
 

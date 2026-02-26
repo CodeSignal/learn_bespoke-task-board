@@ -9,6 +9,7 @@ const copyModuleAssets = {
     mkdirSync(outDir, { recursive: true });
     copyFileSync(resolve(__dirname, 'client/content.html'), resolve(outDir, 'content.html'));
     copyFileSync(resolve(__dirname, 'client/task-board.css'), resolve(outDir, 'simulation.css'));
+    copyFileSync(resolve(__dirname, 'client/help-content.html'), resolve(outDir, 'help-content.html'));
   }
 };
 
